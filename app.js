@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 
 const { PORT = 3001 } = process.env;
-
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const routes = require('./routes/index');
