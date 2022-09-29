@@ -12,6 +12,8 @@ const { validateUrl } = require('../customvalidations/validateurl');
 router.post('/signin', celebrate({
   body: Joi.object()
     .keys({
+      name: Joi.string()
+        .required(),
       email: Joi.string()
         .required()
         .email(),

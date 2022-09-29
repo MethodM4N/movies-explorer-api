@@ -35,7 +35,7 @@ router.post('/movies', celebrate({
       thumbnail: Joi.string()
         .required()
         .custom(validateUrl),
-      movieId: Joi.string()
+      movieId: Joi.number()
         .required(),
     }),
 }), createMovie);

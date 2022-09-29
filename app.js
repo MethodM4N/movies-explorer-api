@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
+const helmet = require('helmet');
 
 const { PORT = 3001 } = process.env;
 const cors = require('cors');
@@ -14,7 +15,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb');
+mongoose.connect('mongodb://127.0.0.1:27017/moviesdb');
 app.use(express.json());
 
 const options = {
@@ -36,6 +37,7 @@ app.use('*', cors(options));
 app.use(cookieParser());
 
 app.use(requestLogger); // подключаем логгер запросов
+app.use(helmet());
 
 app.use(routes);
 
@@ -45,7 +47,4 @@ app.use(errors());
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`App listening on port ${PORT}`);
-});
+app.listen(PORT);

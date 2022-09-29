@@ -19,7 +19,6 @@ const createUser = (req, res, next) => {
     .then(() => res.status(201).send({
       name, email,
     }))
-    // eslint-disable-next-line consistent-return
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Переданы некорректные данные в метод создания пользователя'));
@@ -27,7 +26,7 @@ const createUser = (req, res, next) => {
       if (err.code === 11000) {
         return next(new ConflictError('Пользователь с таким e-mail уже существует'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -73,11 +72,13 @@ const updateUserInfo = (req, res, next) => {
     })
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
+      if (err.code === 11000) {
+        return next(new ConflictError('Пользователь с таким e-mail уже существует'));
+      }
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные в метод обновления информации о пользователе'));
-      } else {
-        next(err);
       }
+      return next(err);
     });
 };
 
@@ -86,13 +87,7 @@ const getUserInfo = (req, res, next) => {
   User.findById(userId)
     .orFail(() => (new NotFoundError('Пользователь не найден или был запрошен несуществующий роут')))
     .then((user) => res.status(200).send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные в метод поиска пользователя'));
-      } else {
-        next(err);
-      }
-    });
+    .catch((err) => next(err));
 };
 
 const logout = (req, res, next) => {
