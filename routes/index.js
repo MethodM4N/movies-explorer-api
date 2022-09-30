@@ -7,13 +7,14 @@ const auth = require('../middlewares/auth');
 const userRouter = require('./users');
 const movieRouter = require('./movies');
 const NotFoundError = require('../errors/404error');
-const { validateUrl } = require('../customvalidations/validateurl');
 
 router.post('/signin', celebrate({
   body: Joi.object()
     .keys({
       name: Joi.string()
-        .required(),
+        .required()
+        .min(2)
+        .max(30),
       email: Joi.string()
         .required()
         .email(),
@@ -31,13 +32,9 @@ router.post('/signup', celebrate({
       password: Joi.string()
         .required(),
       name: Joi.string()
+        .required()
         .min(2)
         .max(30),
-      about: Joi.string()
-        .min(2)
-        .max(30),
-      avatar: Joi.string()
-        .custom(validateUrl),
     }),
 }), createUser);
 

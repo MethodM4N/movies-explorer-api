@@ -76,7 +76,7 @@ const updateUserInfo = (req, res, next) => {
         return next(new ConflictError('Пользователь с таким e-mail уже существует'));
       }
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные в метод обновления информации о пользователе'));
+        return next(new BadRequestError('Переданы некорректные данные в метод обновления информации о пользователе'));
       }
       return next(err);
     });
